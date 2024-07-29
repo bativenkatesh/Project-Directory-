@@ -1,0 +1,76 @@
+#navbar{
+    height: 100px;
+    background-color: rgb(40, 38, 38);
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-top: -25px;
+    display: flex;
+    font-family: "Chakra Petch";
+    
+}
+#title{
+    padding-top: 16px;
+    padding-left: 60px;
+    
+    color: aliceblue;
+    
+}
+#list-items{
+    display: flex;
+    padding-left: 60px;
+    padding-top: 30px;
+    color: aliceblue;
+    list-style-type:none ;
+    margin-left:360px ;
+    font-size: 1.1em;
+    
+    padding-right: 20px;
+    
+}
+.items{
+    
+    padding-right: 20px;
+}
+a{
+    text-decoration: none;
+    color: aliceblue;
+}
+#loginBox{
+    margin-left:550px;
+    margin-top:30px;
+    height: 400px ;
+    width: 400px;
+    border: 1px solid rgb(217, 202, 202);
+    border-radius: 10px;
+}
+.headings{
+    font-family: "Chakra Petch";
+    margin-left: 10px;
+}
+#ip{
+    margin-left: 20px;
+    width:350px;
+    height: 30px;
+}
+#Continue{
+    margin-left:20px;
+    width: 357px;
+    height: 30px;
+    border-radius: 3px;
+}
+.cat{
+    margin-top: 30px;
+    height: 60px;
+    width: 1400px;
+    border: 1px solid black;
+    margin-left: 55px;
+    border-radius: 4px;
+    text-align:center;
+    padding-top: 23px;
+    font-size: 1.7em;
+    
+}
+.cat:hover{
+    background-color: rgb(40, 38, 38);
+    color: aliceblue;
+}

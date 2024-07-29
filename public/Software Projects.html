@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://localhost:3000/software.htm -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="./Software Projects_files/style.css">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Projects</title>
+    
+</head>
+<body>
+    <header class="header1" style="margin: 0px;">
+        <h1 style="color: black;">DoWhile.inc</h1> 
+        <nav class="navbar">
+            <ul class="navtext">
+                <li><a href="http://localhost:3000/dashboard.htm">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <input type="text" id="searchInput" placeholder="Search for projects..." oninput="searchProjects()">
+
+    <div class="table-container" style="margin-top: 150px;">
+        <input type="text" id="searchInput" placeholder="Search for projects..." oninput="searchProjects()">
+        <table>
+            <thead>
+                <tr>
+                    <th>Project Title</th>
+                    <th>Upload Date</th>
+                    <th>Project Category</th>
+                    <th>File Link</th>
+                </tr>
+            </thead>
+            <tbody id="softwareTableBody"><tr><td>new_9</td><td>2024-01-30</td><td>Software</td><td><a href="http://localhost:3000/uploads/final.txt" target="_blank">Download Link</a></td></tr><tr><td>student dropout</td><td>2024-02-06</td><td>Software</td><td>N/A</td></tr></tbody>
+        </table>
+    </div>
+
+    <script>
+        window.onload = function () {
+            fetchProjectsAndPopulateTable('Software', 'softwareTableBody');
+        };
+
+        function fetchProjectsAndPopulateTable(category, tableBodyId) {
+            fetch('http://localhost:3000/projects', { method: 'GET' })
+                .then(response => response.json())
+                .then(projects => {
+                    const tableBody = document.getElementById(tableBodyId);
+                    tableBody.innerHTML = ''; // Clear existing rows
+                    projects.forEach(project => {
+                        if (project.category === category) {
+                            const row = tableBody.insertRow();
+                            row.insertCell(0).textContent = project.title;
+                            row.insertCell(1).textContent = project.uploadDate.split('T')[0];
+                            row.insertCell(2).textContent = project.category;
+
+                            // Display the fileLink field as a link if it exists
+                            const fileLinkCell = row.insertCell(3);
+                            if (project.fileLink) {
+                                const fileLink = document.createElement('a');
+                                fileLink.href = project.fileLink;
+                                fileLink.textContent = 'Download Link';
+                                fileLink.target = '_blank'; // Open link in a new tab
+                                fileLinkCell.appendChild(fileLink);
+                            } else {
+                                // If fileLink doesn't exist, display 'N/A'
+                                fileLinkCell.textContent = 'N/A';
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error(error));
+        };
+
+        // Search function
+        function searchProjects() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.getElementById('softwareTableBody').getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const title = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+
+            // If the title contains the search input, display the row; otherwise, hide it
+            rows[i].style.display = title.includes(input) ? '' : 'none';
+        }
+    }
+    </script>
+
+
+</body></html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../public/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Projects</title>
+    
+</head>
+<body>
+    <header class="header1" style="margin: 0px;">
+        <h1 style="color: black;">DoWhile.inc</h1> 
+        <nav class="navbar">
+            <ul class="navtext">
+                <li><a href="dashboard.htm">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="table-container" style="margin-top: 150px;">
+        <h2>Hardware Projects</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Project Title</th>
+                    <th>Upload Date</th>
+                    <th>Project Category</th>
+                    <th>File Link</th>
+                </tr>
+            </thead>
+            <tbody id="hardwareTableBody">
+                <!-- Existing rows will be dynamically populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+       window.onload = function () {
+        fetchProjectsAndPopulateTable('hardwareTableBody', 'Hardware');
+    };
+
+    function fetchProjectsAndPopulateTable(tableBodyId, categoryFilter) {
+        fetch('http://localhost:3000/projects')
+            .then(response => response.json())
+            .then(projects => {
+                const tableBody = document.getElementById(tableBodyId);
+                tableBody.innerHTML = ''; // Clear existing rows
+
+                // Filter projects based on the category if a filter is provided
+                const filteredProjects = categoryFilter
+                    ? projects.filter(project => project.category === categoryFilter)
+                    : projects;
+
+                filteredProjects.forEach(project => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).textContent = project.title;
+                    row.insertCell(1).textContent = project.uploadDate.split('T')[0];
+                    row.insertCell(2).textContent = project.category;
+
+                    // Display the fileLink field as a link if it exists
+                    if (project.fileLink) {
+                        const fileLinkCell = row.insertCell(3);
+                        const fileLink = document.createElement('a');
+                        fileLink.href = project.fileLink;
+                        fileLink.textContent = 'Download Link';
+                        fileLink.target = '_blank'; // Open link in a new tab
+                        fileLinkCell.appendChild(fileLink);
+                    } else {
+                        // If fileLink doesn't exist, display 'N/A'
+                        row.insertCell(3).textContent = 'N/A';
+                    }
+                });
+            })
+            .catch(error => console.error(error));
+    };
+    </script>
+</body>
+</html>

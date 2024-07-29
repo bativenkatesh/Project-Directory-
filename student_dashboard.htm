@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            background: url('/public/3425225.jpg');
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+        }
+        .table-container {
+            margin: 100px auto;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        th, td {
+            text-align: center;
+        }
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+        .btn-upload {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .btn-upload:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h1 class="text-center">Student Dashboard</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>IPL</td>
+                    <td id="status-IPL">Pending</td>
+                    <td><button class="btn btn-upload" onclick="uploadProject('IPL')">Upload <i class="fas fa-upload"></i></button></td>
+                </tr>
+                <tr>
+                    <td>Web Tech</td>
+                    <td id="status-Web_Tech">Pending</td>
+                    <td><button class="btn btn-upload" onclick="uploadProject('Web_Tech')">Upload <i class="fas fa-upload"></i></button></td>
+                </tr>
+                <tr>
+                    <td>Python</td>
+                    <td id="status-Python">Pending</td>
+                    <td><button class="btn btn-upload" onclick="uploadProject('Python')">Upload <i class="fas fa-upload"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+        <center>
+            <a href="dashboard.htm">Logout</a>
+        </center>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchProjectStatuses();
+        });
+
+        function fetchProjectStatuses() {
+            fetch('http://localhost:3000/projectStatuses')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched data:', data);
+                    data.forEach(Delivery => {
+                        const statusCell = document.getElementById(`status-${Delivery.category}`);
+                        if (statusCell) {
+                            if (Delivery.status) {
+                                console.log(`Updating status for ${Delivery.category}: ${Delivery.status}`);
+                                statusCell.textContent = Delivery.status;
+                            } else {
+                                console.log(`Status undefined for category: ${Delivery.category}`);
+                            }
+                        } else {
+                            console.log(`No status cell found for category: ${Delivery.category}`);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching project statuses:', error));
+        }
+
+        function uploadProject(subject) {
+            localStorage.setItem('uploadCategory', subject);
+            window.location.href = "/upload.htm";
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

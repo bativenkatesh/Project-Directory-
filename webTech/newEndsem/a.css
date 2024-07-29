@@ -1,0 +1,39 @@
+details{
+    display:block;
+    font-size:14pt;
+    color:red;
+    display: flex;
+    height: 150px;
+    width: 220px;
+    margin-left: 100px;
+}
+usn{
+    display:block; 
+    font-style:italic; 
+    font-size:16pt;
+    color:purple;
+    border: 1px solid black;
+    }
+    name{
+    display:block;
+    font-style:italic;
+    font-size:16pt;
+    color:blue;
+    border: 1px solid black;
+    }
+    mobile{
+    display:block;
+    font-style:italic;
+    font-size:16pt;
+    color:green;
+    border: 1px solid black;
+    }
+    email
+    {
+    display:block;
+    font-style:italic;
+    font-size:16pt;
+    color:orange;
+    border: 1px solid black;
+    }
+    

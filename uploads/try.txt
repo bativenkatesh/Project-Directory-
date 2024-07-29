@@ -1,0 +1,10 @@
+    <header class="header1" style="margin: 0px;">
+        <img src=download.jpeg style="width: 78px; height: 80px; border-radius: 20px;" id="GOIL" alt="GOIL Image">
+        <h1 style="color: black;">DoWhile.inc</h1> 
+        <nav class="navbar">
+            <ul class="navtext">
+                <li><a href="dashboard.htm">Home</a></li>
+                <li class="material-symbols-outlined" style="margin-left: auto !important;"><a href="login_page.htm">face</a></li>
+            </ul>
+        </nav>
+    </header>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scope=1.0">
+<title>Student Feedback Form</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5; /* Light gray background */
+  }
+
+  .form-container {
+    width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    border: 2px solid #ccc; /* Light gray border */
+    border-radius: 10px;
+    background-color: #fff; /* White background for the form */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .heading-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    color: #3498db; /* Dark blue heading */
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    height: 100px; /* Adjust textarea height as needed */
+  }
+
+  .feedback-options {
+    display: flex; /* Arrange feedback options horizontally */
+    margin-bottom: 15px;
+  }
+
+  input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  label.radio-label {
+    margin-right: 15px;
+  }
+
+  input[type="submit"] {
+    background-color: #2ecc71; /* Green submit button */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right; /* Right-align submit button */
+  }
+
+  input[type="submit"]:hover {
+    background-color: #27ae60; /* Darker green hover effect */
+  }
+</style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="heading-container">
+      <h1>Student Feedback Form</h1>
+    </div>
+    <form>
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name">
+      </div>
+      <div class="form-group">
+        <label for="cal">Phone No:</label>
+        <input type="number" name="cal" id="cal">
+      </div>
+      <div class="form-group">
+        <label for="em">Email Id:</label>
+        <input type="email" name="em" id="em">
+      </div>
+      <div class="form-group">
+        <label>Feedback:</label>
+        <div class="feedback-options">
+          <label class="radio-label">
+            <input type="radio" name="feed" id="1" value="Excellent">Excellent
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="feed" id="2" value="Very Good">Very Good
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="feed" id="3" value="Good">Good
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="feed" id="4" value="Satisfactory">Satisfactory
+          </label>
+          <center><input type="submit" value="Submit"></center>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

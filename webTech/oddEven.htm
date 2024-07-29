@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="inp">Enter Number</label>
+    <input id="inp" type="number">
+    <button id="sub">submit</button>
+    <center><p id="op"></p></center>
+    <script>
+        
+        document.getElementById("sub").onclick=function(){
+            let num=document.getElementById("inp").value;
+        if(num%2==0){
+            document.getElementById("op").textContent=`entered num ${num} is even`;
+        }
+        else if(num%2!=0){
+            document.getElementById("op").textContent=`entered num ${num} is odd`;
+        }
+        else{
+            document.getElementById("op").textContent=`entered num ${num} is 0`;
+        }
+    }
+    </script>
+</body>
+</html>

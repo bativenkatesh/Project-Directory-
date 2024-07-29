@@ -1,0 +1,135 @@
+#GOIL {
+    float: left;
+}
+
+.header1 {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    top: 0;
+    box-shadow: 5px 10px 10px rgba(220, 215, 220, 0.912);
+    z-index: 999;
+}
+
+.header1 img {
+    margin-right: 10px;
+}
+
+.navbar ul {
+    list-style-type: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.navbar a {
+    color: black;
+    text-decoration: none;
+    padding: 15px;
+    display: block;
+    text-align: center;
+    border-radius: 10px;
+    float: left;
+}
+
+.navbar a:hover {
+    background-color: rgb(186, 185, 185);
+}
+
+.navbar li {
+    float: left;
+}
+
+.container1,
+.container2 {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.box {
+    margin-top: 100px;
+    justify-content: center;
+    width: 1100px;
+    height: 250px;
+    color: black;
+    text-align: center;
+    border-radius: 2px;
+    border: 2px solid rgb(0, 0, 0);
+    padding: 1rem;
+    box-shadow: 5px 10px 10px rgba(198, 196, 198, 0.912);
+    margin-left: 40px;
+    display: flex;
+    font-size: xx-large ;
+}
+
+.navtext{
+    font-style:poppins;
+    font-size: larger;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+.navbar li:last-child {
+    margin-left: auto !important; /* Add !important to ensure it overrides other styles */
+}
+.socials {
+    position: fixed;
+    left: 0;
+    top:170px;
+    padding: 10px;
+    background-color: white;
+    z-index: 1000;
+}
+
+.socials ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.socials li {
+    margin-top: 45px;
+    margin-left: 25px;
+    margin-right:10px;
+}
+
+.socials a {
+    color: black;
+    text-decoration: none;
+    font-size: 25px;
+}
+.socials  a:hover{
+    border-radius: 100px;
+    background-color: rgb(199, 201, 203);
+}
+.table-container {
+    margin-left: 140px;
+    margin-right: 40px;
+    width: 80%;
+    box-shadow: 5px 10px 10px rgba(198, 196, 198, 0.912);
+    overflow: hidden;
+}
+
+table {
+    
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 10px;
+}
+

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/public/3425225.jpg');
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: row;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: rgba(76, 175, 80, 0.8); /* Slightly transparent green */
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 1;
+        }
+
+        .navbar h1 {
+            color: white;
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .left-content {
+            width: 40%;
+            text-align: left;
+            color: white;
+            margin-right: 50px;
+            margin-top: -100px;
+        }
+
+        .left-content img {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+        }
+
+        .left-content h2 {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.7); /* Slightly transparent white */  
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            margin-top: -30px;
+        }
+
+        form img {
+            height: 100px;
+            width: 100px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="left-content">
+        <img src="/public/Screenshot_2024-07-28_203809-removebg-preview.png" alt="Logo" style="width: 600px;margin-left: -100px;">
+        <h2>Welcome to DoWhile</h2>
+        <p>Your one-stop solution for managing student projects and evaluations.</p>
+    </div>
+
+    <form id="loginForm">
+        <img src="/public/login.png" alt="Login Icon">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="button" onclick="validateLogin()">Login</button>
+        <div class="error" id="error"></div>
+        <a id="toggleLink" class="toggle-link" href="javascript:void(0);" onclick="toggleRole()">Switch to Admin Login</a>
+    </form>
+<script>
+    var role = 'student';
+
+        function validateLogin() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var errorDiv = document.getElementById("error");
+
+            if ((username === "student" && password === "student" && role === "student") ||
+                (username === "admin" && password === "admin" && role === "admin")) {
+                errorDiv.textContent = "";
+                alert("Login successful!");
+                if (role === "student") {
+                    window.location.href = "student_dashboard.htm";
+                } else if (role === "admin") {
+                    window.location.href = "software.htm";
+                }
+            } else {
+                errorDiv.textContent = "Invalid username or password. Please try again.";
+            }
+        }
+
+        function toggleRole() {
+            var roleToggle = document.getElementById("toggleLink");
+            var loginForm = document.getElementById("loginForm");
+            var usernameLabel = document.querySelector('label[for="username"]');
+            var passwordLabel = document.querySelector('label[for="password"]');
+            if (role === 'student') {
+                role = 'admin';
+                roleToggle.textContent = "Switch to Student Login";
+                usernameLabel.textContent = "Admin Username:";
+                passwordLabel.textContent = "Admin Password:";
+                loginForm.querySelector('img').src = '/public/admin_login.png';
+            } else {
+                role = 'student';
+                roleToggle.textContent = "Switch to Admin Login";
+                usernameLabel.textContent = "Username:";
+                passwordLabel.textContent = "Password:";
+                loginForm.querySelector('img').src = '/public/login.png';
+            }
+        }
+    </script>
+</body>
+</html>
