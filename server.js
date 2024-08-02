@@ -129,18 +129,16 @@ app.post('/uploads', upload.single('sourceCodeFile'), async (req, res) => {
     await newProject.save();
 
     // Update the status for the specific student's subject in the newSchema
-    const updatedDelivery = await Delivery.findOneAndUpdate(
+     await Delivery.findOneAndUpdate(
       { category, username: req.session.user.username },
       { status: 'Submitted' },
       { new: true }
     );
 
-    if (!updatedDelivery) {
-      return res.status(404).send('Delivery not found');
-    }
+    
 
     // Send the updated status back to the client
-    res.json({ success: true, status: updatedDelivery.status });
+    // res.json({ success: true, status: updatedDelivery.status });
     
 
     res.redirect('/student_dashboard.htm');
@@ -240,13 +238,23 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.post('/toggleRole', (req, res) => {
-  if (req.session.user) {
-      // Toggle the user's role
-      req.session.user.role = req.session.user.role === 'student' ? 'admin' : 'student';
-      res.send(`Role changed to ${req.session.user.role}`);
-  } else {
-      res.status(401).send('User not authenticated');
+app.get('/getDeliveryStatus', async (req, res) => {
+  try {
+    const username = req.session.user.username; // Get username from session
+    const { category } = req.query; // Get category from query parameters
+
+    // Find the delivery record for the specific user and category
+    const delivery = await Delivery.findOne({ username, category });
+
+    if (!delivery) {
+      return res.status(404).json({ message: 'No delivery record found for this category.' });
+    }
+
+    // Send the status as a JSON response
+    res.json({ status: delivery.status });
+  } catch (error) {
+    console.error('Error fetching delivery status:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
@@ -256,13 +264,13 @@ app.listen(PORT, () => {
 
 
 // to create user
-const newuser=new User({
-  username: "admin",
-  password: "admin",
-  role:"admin"
-});
+// const newuser=new User({
+//   username: "admin",
+//   password: "admin",
+//   role:"admin"
+// });
 
-newuser.save();
+// newuser.save();
 
 //for session in delivery
 // async function createDeliveries() {

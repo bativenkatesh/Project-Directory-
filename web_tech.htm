@@ -23,7 +23,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>NAME</th>
+                    <th>Title</th>
                     <th>Upload Date</th>
                     <th>USN</th>
                     <th>File Link</th>
@@ -55,7 +55,7 @@ function fetchProjectsAndPopulateTable(tableBodyId, categoryFilter) {
 
             filteredProjects.forEach(project => {
                 const row = tableBody.insertRow();
-                row.insertCell(0).textContent = project.title;
+                row.insertCell(0).textContent = project.projectTitle;
                 row.insertCell(1).textContent = project.uploadDate.split('T')[0];
                 row.insertCell(2).textContent = project.category;
 

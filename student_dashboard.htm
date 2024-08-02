@@ -110,8 +110,8 @@
                 </tr>
                 <tr>
                     <td>Web Tech</td>
-                    <td id="status-Web_Tech">Pending</td>
-                    <td><button class="btn btn-upload" onclick="uploadProject('Web_Tech')">Upload <i class="fas fa-upload"></i></button></td>
+                    <td id="status-Web Tech">Pending</td>
+                    <td><button class="btn btn-upload" onclick="uploadProject('Web Tech')">Upload <i class="fas fa-upload"></i></button></td>
                 </tr>
                 <tr>
                     <td>Python</td>
@@ -143,85 +143,34 @@
                     }
                 })
                 .catch(error => console.error('Error fetching username:', error));
+
+                updateProjectStatus('Python');
+                updateProjectStatus('Web Tech');
+                updateProjectStatus('IPL');
         });
 
-//         document.getElementById('uploadForm').addEventListener('submit', function(event) {
-//     event.preventDefault(); // Prevent the form from submitting normally
-
-//     const formData = new FormData(this);
-
-//     fetch('/uploads', {
-//       method: 'POST',
-//       body: formData
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//       if (data.success) {
-//         // Update the status message on the page
-//         const statusHeader = document.getElementById('statusHeader');
-//         statusHeader.textContent = `Status: ${data.status}`;
-//         alert('Upload successful and status updated!');
-//       } else {
-//         alert('Error: ' + (data.message || 'Something went wrong!'));
-//       }
-//     })
-//     .catch(error => {
-//       console.error('Error uploading file:', error);
-//       alert('Upload failed!');
-//     });
-//   });
-        // function fetchProjectStatuses() {
-        //     // fetch('http://localhost:3000/projectStatuses')
-        //         fetch('/uploads', {
-        //           method: 'POST',
-        //         //   body: formData
-        //        })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             console.log('Fetched data:', data);
-        //             data.forEach(Delivery => {
-        //                 const statusCell = document.getElementById(`status-${Delivery.category}`);
-        //                 if (statusCell) {
-        //                     if (Delivery.status) {
-        //                         console.log(`Updating status for ${Delivery.category}: ${Delivery.status}`);
-        //                         statusCell.textContent = Delivery.status;
-        //                     } else {
-        //                         console.log(`Status undefined for category: ${Delivery.category}`);
-        //                     }
-        //                 } else {
-        //                     console.log(`No status cell found for category: ${Delivery.category}`);
-        //                 }
-        //             });
-        //         })
-        //         .catch(error => console.error('Error fetching project statuses:', error));
-        // }
-
+        function updateProjectStatus(category) {
+  // Fetch the delivery status for the given category
+  fetch(`/getDeliveryStatus?category=${category}`)
+    .then(response => response.json())
+    .then(data => {
+      const statusElement = document.getElementById(`status-${category}`);
+      
+      if (data.status) {
+        // Update the status text in the table
+        statusElement.textContent = data.status;
+      } else {
+        // Handle cases where no status is found
+        console.warn(`No status found for category ${category}`);
+        statusElement.textContent = 'Pending'; // Default to 'Pending'
+      }
+    })
+    .catch(error => console.error('Error fetching project status:', error));
+}
         function uploadProject(subject) {
             localStorage.setItem('uploadCategory', subject);
             window.location.href = "/upload.htm";
-            const formData = new FormData();
-  formData.append('category', subject);
-
-  fetch('/uploads', {
-    method: 'POST',
-    body: formData,
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        // Update the status in the table if the upload was successful
-        const statusElement = document.getElementById(`status-${category}`);
-        statusElement.textContent = data.status;
-        alert(`Upload successful for ${category}! Status updated to Submitted.`);
-      } else {
-        alert('Error: ' + (data.message || 'Something went wrong!'));
-      }
-    })
-    .catch(error => {
-      console.error('Error uploading project:', error);
-      alert('Upload failed!');
-    });
-        }
+        }    
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
