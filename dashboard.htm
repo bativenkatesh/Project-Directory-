@@ -120,57 +120,63 @@
         <p>Your one-stop solution for managing student projects and evaluations.</p>
     </div>
 
-    <form id="loginForm">
+    <form id="loginForm" action="/login" method="post">
         <img src="/public/login.png" alt="Login Icon">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
-        <button type="button" onclick="validateLogin()">Login</button>
+        <label for="role">Select Role:</label>
+        <select id="role" name="role" required>
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+        </select>
+        <button type="submit" >Login</button>
         <div class="error" id="error"></div>
-        <a id="toggleLink" class="toggle-link" href="javascript:void(0);" onclick="toggleRole()">Switch to Admin Login</a>
+        
     </form>
+    
 <script>
-    var role = 'student';
+    // var role = 'student';
 
-        function validateLogin() {
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            var errorDiv = document.getElementById("error");
+        // function validateLogin() {
+        //     var username = document.getElementById("username").value;
+        //     var password = document.getElementById("password").value;
+        //     var errorDiv = document.getElementById("error");
 
-            if ((username === "student" && password === "student" && role === "student") ||
-                (username === "admin" && password === "admin" && role === "admin")) {
-                errorDiv.textContent = "";
-                alert("Login successful!");
-                if (role === "student") {
-                    window.location.href = "student_dashboard.htm";
-                } else if (role === "admin") {
-                    window.location.href = "software.htm";
-                }
-            } else {
-                errorDiv.textContent = "Invalid username or password. Please try again.";
-            }
-        }
+        //     if ((username === "student" && password === "student" && role === "student") ||
+        //         (username === "admin" && password === "admin" && role === "admin")) {
+        //         errorDiv.textContent = "";
+        //         alert("Login successful!");
+        //         if (role === "student") {
+        //             window.location.href = "student_dashboard.htm";
+        //         } else if (role === "admin") {
+        //             window.location.href = "software.htm";
+        //         }
+        //     } else {
+        //         errorDiv.textContent = "Invalid username or password. Please try again.";
+        //     }
+        // }
 
-        function toggleRole() {
-            var roleToggle = document.getElementById("toggleLink");
-            var loginForm = document.getElementById("loginForm");
-            var usernameLabel = document.querySelector('label[for="username"]');
-            var passwordLabel = document.querySelector('label[for="password"]');
-            if (role === 'student') {
-                role = 'admin';
-                roleToggle.textContent = "Switch to Student Login";
-                usernameLabel.textContent = "Admin Username:";
-                passwordLabel.textContent = "Admin Password:";
-                loginForm.querySelector('img').src = '/public/admin_login.png';
-            } else {
-                role = 'student';
-                roleToggle.textContent = "Switch to Admin Login";
-                usernameLabel.textContent = "Username:";
-                passwordLabel.textContent = "Password:";
-                loginForm.querySelector('img').src = '/public/login.png';
-            }
-        }
+        // function toggleRole() {
+        //     var roleToggle = document.getElementById("toggleLink");
+        //     var loginForm = document.getElementById("loginForm");
+        //     var usernameLabel = document.querySelector('label[for="username"]');
+        //     var passwordLabel = document.querySelector('label[for="password"]');
+        //     if (role === 'student') {
+        //         role = 'admin';
+        //         roleToggle.textContent = "Switch to Student Login";
+        //         usernameLabel.textContent = "Admin Username:";
+        //         passwordLabel.textContent = "Admin Password:";
+        //         loginForm.querySelector('img').src = '/public/admin_login.png';
+        //     } else {
+        //         role = 'student';
+        //         roleToggle.textContent = "Switch to Admin Login";
+        //         usernameLabel.textContent = "Username:";
+        //         passwordLabel.textContent = "Password:";
+        //         loginForm.querySelector('img').src = '/public/login.png';
+        //     }
+        // }
     </script>
 </body>
 </html>
