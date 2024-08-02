@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const session=require('express-session');
+const Mongostore=require('connect-mongo');
 
 const app = express();
 const PORT = 3000;
@@ -10,19 +12,17 @@ const PORT = 3000;
 app.set('view engine', 'ejs');
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/bativ', {
+mongoose.connect('mongodb://127.0.0.1:27017/sudhanva', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  
+})
+.then(() => {
+  console.log('Connected to MongoDB successfully!');
+})
+.catch((error) => {
+  console.error('Error connecting to MongoDB:', error.message);
 });
 
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-}
-
-// Schema Definitions
 const projectSchema = new mongoose.Schema({
   projectTitle: String,
   category: String,
@@ -32,13 +32,43 @@ const projectSchema = new mongoose.Schema({
 });
 
 const newSchema = new mongoose.Schema({
-  projectTitle: String,
+  // projectTitle: String,
   category: String,
   status: { type: String, default: 'Pending' },
+  username: String,
+});
+// Define the User schema
+const userSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+  role: { type: String, enum: ['student', 'admin'], required: true }
+  // You can add other fields like email, role, etc.
 });
 
+// Create the User model
+const User = mongoose.model('User', userSchema);
 const Project = mongoose.model('Project', projectSchema);
 const Delivery = mongoose.model('Delivery', newSchema);
+
+app.use(session({
+  secret: "SECRETKEY",
+  resave: false,
+  saveUninitialized: false,
+  store: Mongostore.create({
+    mongoUrl: 'mongodb://127.0.0.1:27017/sudhanva',
+    collectionName:'sessions'
+  }),
+  cookie:{
+    maxAge: 1000*60*60*24
+  }
+}));
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
+// Schema Definitions
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -99,11 +129,16 @@ app.post('/uploads', upload.single('sourceCodeFile'), async (req, res) => {
     await newProject.save();
 
     // Update the status for the specific student's subject in the newSchema
-    await Delivery.findOneAndUpdate(
-      { category },
+     await Delivery.findOneAndUpdate(
+      { category, username: req.session.user.username },
       { status: 'Submitted' },
       { new: true }
     );
+
+    
+
+    // Send the updated status back to the client
+    // res.json({ success: true, status: updatedDelivery.status });
     
 
     res.redirect('/student_dashboard.htm');
@@ -134,7 +169,7 @@ serveHTMLFile('/IPL.htm', 'IPL.htm');
 // Serve uploaded files
 app.get('/uploads/:filename', (req, res) => {
   const filename = req.params.filename;
-  const filePath = path.join(__dirname+'uploads',filename);
+  const filePath = path.join(__dirname,'uploads',filename);
   res.sendFile(filePath, (err) => {
     if (err) {
       console.error('Error sending file:', err);
@@ -143,6 +178,115 @@ app.get('/uploads/:filename', (req, res) => {
   });
 });
 
+app.post('/login',async(req,res) =>{
+  const { username, password, role } = req.body;
+
+  try {
+      // Find the user in the database by username
+      const user = await User.findOne({ username });
+
+      if (!user) {
+          // If the user is not found, send an error response
+          return res.status(401).send('Invalid credentials');
+      }
+
+      // Compare the provided password with the stored password
+      if (user.password !== password) {
+          // If the password doesn't match, send an error response
+          return res.status(401).send('Invalid credentials');
+      }
+
+      // Check if the selected role matches the user's role in the database
+      if (user.role !== role) {
+          // If the role does not match, send an error response
+          return res.status(403).send('Invalid role selected');
+      }
+
+      // If credentials and role are valid, save user info and role in session
+      req.session.user = { 
+          username: user.username,
+          role: user.role
+      };
+
+      // Redirect to the appropriate dashboard based on role
+      if (role === 'admin') {
+          res.redirect('/software.htm');
+      } else {
+          res.redirect('/student_dashboard.htm');
+      }
+  } catch (error) {
+      console.error('Error during login:', error);
+      res.status(500).send('Internal Server Error');
+  }
+
+})
+app.get('/login', (req, res) => {
+  if (req.session.user) {
+    res.json({ username: req.session.user.username });
+  } else {
+    res.json({ username: null });
+  }
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          console.error('Error destroying session:', err);
+          return res.status(500).send('Internal Server Error');
+      }
+      res.redirect('/dashboard.htm');
+  });
+});
+
+app.get('/getDeliveryStatus', async (req, res) => {
+  try {
+    const username = req.session.user.username; // Get username from session
+    const { category } = req.query; // Get category from query parameters
+
+    // Find the delivery record for the specific user and category
+    const delivery = await Delivery.findOne({ username, category });
+
+    if (!delivery) {
+      return res.status(404).json({ message: 'No delivery record found for this category.' });
+    }
+
+    // Send the status as a JSON response
+    res.json({ status: delivery.status });
+  } catch (error) {
+    console.error('Error fetching delivery status:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
+// to create user
+// const newuser=new User({
+//   username: "admin",
+//   password: "admin",
+//   role:"admin"
+// });
+
+// newuser.save();
+
+//for session in delivery
+// async function createDeliveries() {
+//   const deliveries = [
+//     { category: 'IPL', status: 'Pending', username: 'venku' },
+//     { category: 'Python', status: 'Pending', username: 'venku' },
+//     { category: 'Web Tech', status: 'Pending', username: 'venku' },
+//     { category: 'IPL', status: 'Pending', username: 'sudhanva' },
+//     { category: 'Python', status: 'Pending', username: 'sudhanva' },
+//     { category: 'Web Tech', status: 'Pending', username: 'sudhanva' },
+//   ];
+
+//   for(const deliverdata of deliveries){
+//     const delivery=new Delivery(deliverdata);
+//     await delivery.save();
+//   }
+// }
+
+// createDeliveries();

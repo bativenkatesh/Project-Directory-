@@ -13,6 +13,40 @@
             color: #333;
             padding: 20px;
         }
+        .header1 {
+            background-color: #308421;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        .navbar .navtext {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        .navbar .navtext li {
+            display: inline;
+            margin-right: 20px;
+        }
+        .navbar .navtext li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info i {
+            font-size: 1.5rem;
+            margin-right: 8px;
+        }
+
+        .username {
+            font-weight: bold;
+            color: whitesmoke;
+        }
         .table-container {
             margin: 100px auto;
             max-width: 800px;
@@ -46,6 +80,18 @@
     </style>
 </head>
 <body>
+    <header class="header1">
+        <h1>DoWhile.inc</h1>
+        <nav class="navbar">
+            <ul class="navtext">
+                <li><a href="dashboard.htm">Home</a></li>
+                <li class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span class="username"></span> <!-- Username will be injected here -->
+                </li>
+            </ul>
+        </nav>
+    </header>
     <div class="table-container">
         <h1 class="text-center">Student Dashboard</h1>
         <table class="table table-bordered">
@@ -64,8 +110,8 @@
                 </tr>
                 <tr>
                     <td>Web Tech</td>
-                    <td id="status-Web_Tech">Pending</td>
-                    <td><button class="btn btn-upload" onclick="uploadProject('Web_Tech')">Upload <i class="fas fa-upload"></i></button></td>
+                    <td id="status-Web Tech">Pending</td>
+                    <td><button class="btn btn-upload" onclick="uploadProject('Web Tech')">Upload <i class="fas fa-upload"></i></button></td>
                 </tr>
                 <tr>
                     <td>Python</td>
@@ -74,42 +120,57 @@
                 </tr>
             </tbody>
         </table>
-        <center>
-            <a href="dashboard.htm">Logout</a>
-        </center>
+        <form action="/logout" method="get">
+            <center><button class="btn btn-upload" type="submit">
+                logout
+            </button></center>
+        </form>
+            <!-- <a href="dashboard.htm">Logout</a>
+        </center> -->
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            fetchProjectStatuses();
-        });
-
-        function fetchProjectStatuses() {
-            fetch('http://localhost:3000/projectStatuses')
+            // fetchProjectStatuses();
+            fetch('/login')
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Fetched data:', data);
-                    data.forEach(Delivery => {
-                        const statusCell = document.getElementById(`status-${Delivery.category}`);
-                        if (statusCell) {
-                            if (Delivery.status) {
-                                console.log(`Updating status for ${Delivery.category}: ${Delivery.status}`);
-                                statusCell.textContent = Delivery.status;
-                            } else {
-                                console.log(`Status undefined for category: ${Delivery.category}`);
-                            }
-                        } else {
-                            console.log(`No status cell found for category: ${Delivery.category}`);
-                        }
-                    });
+                    if (data.username) {
+                        console.log(data.username)
+                        document.querySelector('.username').textContent = data.username;
+                    } else {
+                        document.querySelector('.username').textContent = 'Guest';
+                    }
                 })
-                .catch(error => console.error('Error fetching project statuses:', error));
-        }
+                .catch(error => console.error('Error fetching username:', error));
 
+                updateProjectStatus('Python');
+                updateProjectStatus('Web Tech');
+                updateProjectStatus('IPL');
+        });
+
+        function updateProjectStatus(category) {
+  // Fetch the delivery status for the given category
+  fetch(`/getDeliveryStatus?category=${category}`)
+    .then(response => response.json())
+    .then(data => {
+      const statusElement = document.getElementById(`status-${category}`);
+      
+      if (data.status) {
+        // Update the status text in the table
+        statusElement.textContent = data.status;
+      } else {
+        // Handle cases where no status is found
+        console.warn(`No status found for category ${category}`);
+        statusElement.textContent = 'Pending'; // Default to 'Pending'
+      }
+    })
+    .catch(error => console.error('Error fetching project status:', error));
+}
         function uploadProject(subject) {
             localStorage.setItem('uploadCategory', subject);
             window.location.href = "/upload.htm";
-        }
+        }    
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
